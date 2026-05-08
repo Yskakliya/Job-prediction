@@ -1,21 +1,3 @@
-"""
-Skill-Based Job Role Predictor — ADVANCED
-INF375 Final Project — Flet App (Desktop + Web)
-
-Запуск:   python app.py
-Веб:      flet run --web app.py
-
-Зависимости:
-    pip install flet scikit-learn pandas nltk
-    python -c "import nltk; nltk.download('punkt')"
-
-Структура проекта:
-    app.py         — UI (этот файл)
-    project.py     — ML pipeline (твой файл)
-    jobs.csv       — датасет
-    model_cache/   — сохранённые модели (создаётся автоматически)
-"""
-
 import flet as ft
 import threading
 import json
@@ -23,11 +5,6 @@ import urllib.request
 import os
 import pickle
 import re
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  ML ИНТЕГРАЦИЯ  (логика из project.py)
-# ══════════════════════════════════════════════════════════════════════════════
-
 ML_AVAILABLE    = False
 _ml_models      = None   # {"Random Forest": model, "Logistic Regression": model, ...}
 _ml_vectorizer  = None   # TfidfVectorizer
@@ -175,9 +152,7 @@ def predict_with_ml(skills_text: str):
         return None
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  CLAUDE API
-# ══════════════════════════════════════════════════════════════════════════════
 
 CLAUDE_API_URL = "https://api.anthropic.com/v1/messages"
 CLAUDE_MODEL   = "claude-sonnet-4-5"
@@ -253,10 +228,7 @@ def predict_claude_only(api_key: str, skills_text: str) -> dict:
     return result
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  KEYWORD FALLBACK
-# ══════════════════════════════════════════════════════════════════════════════
-
 SKILL_ROLE_MAP = {
     "python":       {"Data Scientist": 0.4, "Backend Developer": 0.35, "ML Engineer": 0.25},
     "sql":          {"Data Analyst": 0.6, "Data Scientist": 0.3, "Backend Developer": 0.1},
@@ -307,10 +279,8 @@ def fallback_predict(skills_text: str):
         "source":         "keyword",
     }
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  UNIFIED PREDICT
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 SOURCE_LABELS = {
     "ml+claude": ("🤖+✦", "ML Models + Claude AI", "#34d399"),
@@ -347,9 +317,7 @@ def unified_predict(skills_text: str, api_key: str, status_cb=None) -> dict:
     }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  ДИЗАЙН
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 BG      = "#09090f"
 BG2     = "#13131f"
@@ -392,15 +360,12 @@ SUGGESTED_SKILLS = [
     "Scrum", "Vue", "TypeScript", "Go", "Flutter", "Next.js", "LLM",
 ]
 TEAM = [
-    {"name": "Aliya Yskak",   "role": "ML Engineer",     "emoji": "🤖", "color": "#f472b6"},
-    {"name": "Team Member 2", "role": "Data Engineer",   "emoji": "📊", "color": "#38bdf8"},
-    {"name": "Team Member 3", "role": "Frontend & Demo", "emoji": "🎨", "color": "#fb923c"},
+    {"name": "Aliya Yskak",   "role": "ML Engineer",    "emoji": "🤖", "color": "#f472b6"},
+    {"name": "Meruyert Askar", "role": "Data Engineer",  "emoji": "📊", "color": "#38bdf8"},
+    {"name": "Bekzhan Karim", "role": "Frontend & Demo","emoji": "🎨", "color": "#fb923c"},
 ]
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  КОМПОНЕНТЫ
-# ══════════════════════════════════════════════════════════════════════════════
 
 def nav_bar(page: ft.Page, current: str):
     def btn(label, route):
@@ -440,9 +405,7 @@ def badge(text, color=ACCENT2):
     )
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  HOME PAGE
-# ══════════════════════════════════════════════════════════════════════════════
 
 def home_page(page: ft.Page):
     ml_loaded = load_cached_models()
@@ -572,9 +535,8 @@ def home_page(page: ft.Page):
     ], expand=True, spacing=0)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 #  DEMO PAGE
-# ══════════════════════════════════════════════════════════════════════════════
 
 def demo_page(page: ft.Page):
     load_cached_models()
@@ -892,9 +854,7 @@ def demo_page(page: ft.Page):
     ], expand=True, spacing=0)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  ABOUT PAGE
-# ══════════════════════════════════════════════════════════════════════════════
 
 def about_page(page: ft.Page):
     tech_stack = [
@@ -1013,9 +973,7 @@ def about_page(page: ft.Page):
     ], expand=True, spacing=0)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  MAIN
-# ══════════════════════════════════════════════════════════════════════════════
 
 def main(page: ft.Page):
     page.title       = "JobPredictor AI — INF375"
