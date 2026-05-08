@@ -1,0 +1,4 @@
+flet
+pandas
+scikit-learn
+nltk
