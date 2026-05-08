@@ -1,0 +1,1 @@
+web: flet run --web --port $PORT app.py
